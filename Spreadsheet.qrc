@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/About.gif</file>
+        <file>images/Copy.bmp</file>
+        <file>images/Cut.bmp</file>
+        <file>images/Exit.bmp</file>
+        <file>images/find.gif</file>
+        <file>images/gotocell.gif</file>
+        <file>images/New.bmp</file>
+        <file>images/open.gif</file>
+        <file>images/Paste.bmp</file>
+        <file>images/Save.bmp</file>
+    </qresource>
+</RCC>
