@@ -1,7 +1,9 @@
 #include "spreadsheet.h"
-
+#include "cell.h"
 Spreadsheet::Spreadsheet(QWidget *parent):QTableWidget(parent)
 {
+    setItemPrototype(new Cell);
+
     setRowCount(RowCount);
     setColumnCount(ColumnCount);
     clear();
