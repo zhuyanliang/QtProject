@@ -29,7 +29,7 @@ QVariant Cell::data(int role) const
         if(value().isValid()){
             return value().toString();
         }else{
-            return "####";
+            return value().toString();
         }
     }
     else if(role == Qt::TextAlignmentRole)
@@ -43,7 +43,6 @@ QVariant Cell::data(int role) const
             return int(Qt::AlignRight|Qt::AlignVCenter);
         }
     }
-
     else
     {
         return QTableWidgetItem::data(role);
@@ -76,8 +75,14 @@ QVariant Cell::value() const
 
         cachedIsDirty = false;
     }
+    cachedValue = formula();
 
     return cachedValue;
+}
+
+void Cell::setFormula(const QString &str)
+{
+    setData(Qt::EditRole,str);
 }
 
 QString Cell::formula() const

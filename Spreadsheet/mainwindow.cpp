@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     createRecentFileActions();
     createRecentFileMenus();
 
+    createContextMenu();
     readSettings();
     setCurrentFile("");
 }
@@ -34,6 +35,31 @@ void MainWindow::createStatusBar()
 
     ui->statusBar->addWidget(locationLabel);
     ui->statusBar->addWidget(formulaLabel,1);
+
+    connect(spreadsheet,SIGNAL(currentCellChanged(int,int,int,int)),this,SLOT(updateStatusBar()));
+    connect(spreadsheet,SIGNAL(modified()),this,SLOT(spreadsheetModified()));
+
+    updateStatusBar();
+}
+
+void MainWindow::updateStatusBar()
+{
+    locationLabel->setText(spreadsheet->currentLocation());
+    formulaLabel->setText(spreadsheet->currentFormula());
+}
+
+void MainWindow::spreadsheetModified()
+{
+    setWindowModified(true);
+    updateStatusBar();
+}
+
+void MainWindow::createContextMenu()
+{
+    spreadsheet->addAction(ui->action_Copy);
+    spreadsheet->addAction(ui->action_Paste);
+    spreadsheet->addAction(ui->action_Cut);
+    spreadsheet->setContextMenuPolicy(Qt::ActionsContextMenu);
 }
 
 void MainWindow::connectActions()
@@ -46,6 +72,17 @@ void MainWindow::connectActions()
     connect(ui->actionSave_As,SIGNAL(triggered()),this,SLOT(saveAs()));
     connect(ui->actionNew,SIGNAL(triggered()),this,SLOT(newFile()));
     connect(ui->action_Go_to_Cell,SIGNAL(triggered()),this,SLOT(gotoCell()));
+
+    connect(ui->action_Cut,SIGNAL(triggered()),spreadsheet,SLOT(cut()));
+    connect(ui->action_Copy,SIGNAL(triggered()),spreadsheet,SLOT(copy()));
+    connect(ui->action_Paste,SIGNAL(triggered()),spreadsheet,SLOT(paste()));
+    connect(ui->action_Delete,SIGNAL(triggered()),spreadsheet,SLOT(del()));
+    connect(ui->action_Row,SIGNAL(triggered()),spreadsheet,SLOT(selectCurrentRow()));
+    connect(ui->actionColumn,SIGNAL(triggered()),spreadsheet,SLOT(selectCurrentColumn()));
+    connect(ui->action_All,SIGNAL(triggered()),spreadsheet,SLOT(selectAll()));
+
+    connect(ui->action_Recalculate,SIGNAL(triggered()),spreadsheet,SLOT(recalculate()));
+    connect(ui->action_Show_Grid,SIGNAL(triggered(bool)),spreadsheet,SLOT(setShowGrid(bool)));
 
 }
 
@@ -157,7 +194,7 @@ bool MainWindow::okToContinus()
 
         if(ret == QMessageBox::Yes)
         {
-            //save();
+            save();
             return true;
         }
         else if(ret == QMessageBox::Cancel)

@@ -17,6 +17,8 @@ public:
 
     QString formula() const;
 
+    void setFormula(const QString &str);
+
 private:
     QVariant value() const;
 

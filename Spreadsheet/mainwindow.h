@@ -36,6 +36,8 @@ private:
 
     void updateRecentFileActions();
 
+    void createContextMenu();
+
 protected:
     void closeEvent(QCloseEvent *);//所有的关闭时间都会调用它
 
@@ -47,6 +49,8 @@ private slots:
     void openRecentFile();
     void newFile();
     void gotoCell();
+    void spreadsheetModified();
+    void updateStatusBar();
 
 private:
     Ui::MainWindow *ui;
